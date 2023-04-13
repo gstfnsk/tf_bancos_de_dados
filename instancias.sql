@@ -201,14 +201,7 @@ SELECT * FROM Reservations;
 VALUES
       ('2019-12-25', 3, '2019-12-29', 1000.00, 'true', 2, 1),
 	  ('2018-12-25', 4, '2018-12-29', 890.00, 'true', 3, 1);
-
 */
-/*
-DELETE FROM Reservations 
-WHERE reservation_id IN (7, 8);
-*/
---SELECT *
---FROM Users;
 
 --drop table Countries CASCADE;
 --drop table States CASCADE;

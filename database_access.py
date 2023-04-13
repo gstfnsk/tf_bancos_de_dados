@@ -31,7 +31,7 @@ def menu():
     return opcao
 
 
-def codificarConsultas(opcao):
+def codificar_consultas(opcao):
     match opcao:
         case 1:
             query = "SELECT Country_name, count(Reservation_id) as qtReservations FROM AccommodationWithLocation A JOIN Reservations R ON A.Accommodation_id=R.fk_Accommodation_Id WHERE Was_approved = 'true' GROUP BY Country_name;"
@@ -72,26 +72,9 @@ def codificarConsultas(opcao):
 ############### MAIN ##############
 opcao = menu()
 while(opcao!=0):
-    #print(codificarConsultas(opcao))
-    print(pandas.read_sql(codificarConsultas(opcao), engine))
+    #print(codificar_consultas(opcao))
+    print(pandas.read_sql(codificar_consultas(opcao), engine))
     print("\nPressione qualquer tecla para continuar...\n")
     input()
     opcao = menu()
 print("Você pressionou 0. Programa encerrado.")
-
-
-'''
-    consulta1 = pandas.read_sql("SELECT Country_name, count(Reservation_id) as qtReservations FROM AccommodationWithLocation A JOIN Reservations R ON A.Accommodation_id=R.fk_Accommodation_Id WHERE Was_approved = 'true' GROUP BY Country_name;", engine)
-    consulta2 = pandas.read_sql("SELECT User_name FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id GROUP BY User_id, User_name HAVING SUM(Final_price)>(SELECT AVG(Final_price) FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id);", engine)
-    consulta3 = pandas.read_sql("SELECT DISTINCT City_name FROM AccommodationWithLocation A WHERE NOT EXISTS 	(SELECT * FROM AccommodationWithLocation B WHERE (A.City_id = B.City_id) AND B.price >= (SELECT AVG(price) FROM AccommodationWithLocation));", engine)
-    consulta4 = pandas.read_sql("SELECT Accommodation_id FROM AccommodationWithLocation WHERE City_name = 'Sao Paulo' ORDER BY Price;", engine)
-    consulta5 = pandas.read_sql("SELECT City_name, Check_in_date, Checkout_date, User_name FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id WHERE User_name LIKE 'Nat%';", engine)
-    consulta6 = pandas.read_sql("SELECT Country_name FROM Countries C WHERE EXISTS (SELECT * FROM AcomodacaoComLocalizacao A WHERE A.Country_id = C.Country_id));", engine)
-    consulta7 = pandas.read_sql("SELECT Country_name, COUNT(User_id) FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id WHERE User_name LIKE 'Vic%' GROUP BY Country_name, User_id; ", engine)
-    consulta8 = pandas.read_sql("SELECT City_name, Number_of_bedrooms, Accommodation_id FROM AccommodationWithLocation WHERE Number_of_bedrooms > 3 AND City_name LIKE 'Sa%';", engine)
-    consulta9 = pandas.read_sql("SELECT Favorites_name, fk_Accommodation_Id, fk_User_Id FROM InclusionFavorites GROUP BY Favorites_name, fk_Accommodation_Id, fk_User_Id ORDER BY fk_User_Id;", engine)
-    consulta10 = pandas.read_sql("SELECT Accommodation_id, City_name FROM AccommodationWithLocation A JOIN Users U ON A.fk_User_Id=U.User_Id WHERE User_name LIKE 'N%' AND Accommodation_id IN (SELECT Accommodation_id FROM Reservations);", engine)
-
-'''
-
-

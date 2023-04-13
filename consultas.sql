@@ -1,3 +1,4 @@
+--Views:
 /*
 CREATE VIEW AccommodationWithLocation AS 
 SELECT Country_id, State_id, City_id, Country_name, State_name, City_name, Address, Accommodation_id, Price, Number_of_bedrooms, fk_User_Id 
@@ -16,6 +17,9 @@ CREATE VIEW InclusionFavorites AS
 SELECT Favorites_name, Favorites_id, fk_User_Id, fk_Accommodation_Id
 FROM Favorites F JOIN Inclusion I ON F.Favorites_id=I.fk_Favorites_Id;
 */
+
+--Consultas:
+
 --1) Nome e quantidade de reservas de cada país
 /*
 SELECT Country_name, count(Reservation_id) as qtReservations 
@@ -66,7 +70,7 @@ WHERE User_name LIKE 'Nat%';
 SELECT Country_name 
 FROM Countries C 
 WHERE EXISTS 
-(SELECT * FROM AcomodacaoComLocalizacao A WHERE A.Country_id = C.Country_id));
+(SELECT * FROM AccommodationWithLocation A WHERE A.Country_id = C.Country_id));
 */
 
 --7) Quantidade de vezes que um Guest foi para um país
@@ -100,7 +104,7 @@ WHERE User_name LIKE 'N%' AND Accommodation_id IN
 	(SELECT Accommodation_id FROM Reservations);
 */
 
-
+--Procedimento armazenado:
 /*
 CREATE OR REPLACE FUNCTION sendBookingNotification() RETURNS TRIGGER AS $$
 BEGIN
@@ -108,38 +112,24 @@ BEGIN
 	VALUES
 		  (NEW.fk_User_Id, (SELECT DISTINCT fk_User_Id FROM Accommodations WHERE (NEW.fk_Accommodation_Id = Accommodation_id)), Now(), 'Reserva pendente, aguarde confirmação.');	
 	RETURN NEW;
-
+	
 --COMMIT;
 END; 
 $$ LANGUAGE plpgsql;
-
 */
+
+--Gatilho:
 /*
 CREATE OR REPLACE TRIGGER triggerBookingNotification AFTER INSERT ON Reservations 
 FOR EACH ROW EXECUTE FUNCTION sendBookingNotification();
 */
+
+--Teste do gatilho:
 /*
 INSERT INTO Reservations(Check_in_date, Number_of_guests, Checkout_date, Final_price, Was_approved, fk_User_Id, fk_Accommodation_Id) 
 VALUES
       ('2023-08-02', 2, '2023-08-05', 200.80, 'true', 3, 2);
-*/
-
-/*
 SELECT * FROM Messages;
 */
---DROP FUNCTION sendBookingNotification();
---DROP TRIGGER triggerBookingNotification ON Reservations;
-
-
-
-
-
-
-
-
-
-
-
-
 
 
