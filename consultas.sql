@@ -36,7 +36,7 @@ HAVING SUM(Final_price)>
 
 --3) Nomes de cidades que só tem acomodações com preços menores que a média de preços global;
 /*
-Select DISTINCT City_name 
+SELECT DISTINCT City_name 
 FROM AccommodationWithLocation A 
 WHERE NOT EXISTS 
 	(SELECT * 
