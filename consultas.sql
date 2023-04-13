@@ -99,8 +99,36 @@ FROM AccommodationWithLocation A JOIN Users U ON A.fk_User_Id=U.User_Id
 WHERE User_name LIKE 'N%' AND Accommodation_id IN 
 	(SELECT Accommodation_id FROM Reservations);
 */
-	
 
+
+/*
+CREATE OR REPLACE FUNCTION sendBookingNotification() RETURNS TRIGGER AS $$
+BEGIN
+	INSERT INTO Messages (fk_User_Id, fk_User_Id_, Message_timestamp, Message_content) 
+	VALUES
+		  (NEW.fk_User_Id, (SELECT DISTINCT fk_User_Id FROM Accommodations WHERE (NEW.fk_Accommodation_Id = Accommodation_id)), Now(), 'Reserva pendente, aguarde confirmação.');	
+	RETURN NEW;
+
+--COMMIT;
+END; 
+$$ LANGUAGE plpgsql;
+
+*/
+/*
+CREATE OR REPLACE TRIGGER triggerBookingNotification AFTER INSERT ON Reservations 
+FOR EACH ROW EXECUTE FUNCTION sendBookingNotification();
+*/
+/*
+INSERT INTO Reservations(Check_in_date, Number_of_guests, Checkout_date, Final_price, Was_approved, fk_User_Id, fk_Accommodation_Id) 
+VALUES
+      ('2023-08-02', 2, '2023-08-05', 200.80, 'true', 3, 2);
+*/
+
+/*
+SELECT * FROM Messages;
+*/
+--DROP FUNCTION sendBookingNotification();
+--DROP TRIGGER triggerBookingNotification ON Reservations;
 
 
 
