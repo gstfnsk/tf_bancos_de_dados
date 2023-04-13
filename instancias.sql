@@ -64,9 +64,7 @@ CREATE TABLE Favorites (
     Favorites_name varchar(50) not null,
     Favorites_id BIGSERIAL PRIMARY KEY,
     fk_User_Id BIGSERIAL not null,
-	fk_Accommodation_Id BIGSERIAL not null,
-	foreign key (fk_User_Id) references Users(User_id) ON DELETE CASCADE ON UPDATE CASCADE,
-	foreign key (fk_Accommodation_Id) references Accommodations(Accommodation_id) ON DELETE CASCADE ON UPDATE CASCADE
+	foreign key (fk_User_Id) references Users(User_id) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
 CREATE TABLE Reservations (
@@ -145,18 +143,31 @@ VALUES
 	  ('2025-10-05', 10, '2025-10-07', 10.80, 'false', 2, 2),
 	  ('2022-08-23', 1, '2022-08-30', 520.00, 'true', 3, 3),
 	  ('2022-09-02', 2, '2022-09-20', 1100.00, 'true', 1, 4);
-	  
-INSERT INTO Favorites(Favorites_name, fk_User_Id, fk_Accommodation_Id) 
+
+
+INSERT INTO Favorites(Favorites_name, fk_User_Id) 
 VALUES
-      ('Trip to Sao Paulo', 2, 1),
-      ('Next vacation', 1, 2),
-      ('Comfortable places', 3, 3);
-	  
+      ('Trip to Sao Paulo', 1),
+      ('Next vacation', 1),
+      ('Comfortable places', 3);
+  
 INSERT INTO Inclusion(fk_Favorites_Id, fk_Accommodation_Id) 
 VALUES
       (1, 1),
       (2, 2),
       (3, 3);
+*/	
+/*
+INSERT INTO Inclusion(fk_Favorites_Id, fk_Accommodation_Id) 
+VALUES
+	(1, 5),
+	(2, 3),
+	(2, 4),
+	(3, 2);
+
+SELECT * FROM Accommodations;
+	  
+
 	  
 INSERT INTO Messages(fk_User_Id, fk_User_Id_, Message_timestamp, Message_content) 
 VALUES
@@ -165,6 +176,37 @@ VALUES
       (2, 3, '2023-01-2 07:17:14', 'bye');
 */
 
+/*
+INSERT INTO Accommodations(Number_of_bedrooms, Has_wifi, Has_garage, Number_of_bathrooms, Description, Price, fk_Location_Id, fk_User_Id) 
+VALUES
+      (3, 'yes', 'yes', 2, 'Casa da Jade', 1000.00, 1, 1);
+*/
+/* 
+UPDATE Reservations
+SET fk_User_Id = 3 WHERE Final_price = 900.80;
+
+UPDATE Reservations
+SET fk_User_Id = 1 WHERE Final_price = 10.80;
+
+UPDATE Reservations
+SET fk_User_Id = 1 WHERE Final_price = 520.00;
+
+UPDATE Reservations
+SET fk_User_Id = 2 WHERE Final_price = 1100.00;
+
+SELECT * FROM Reservations;
+*/
+
+/*INSERT INTO Reservations(Check_in_date, Number_of_guests, Checkout_date, Final_price, Was_approved, fk_User_Id, fk_Accommodation_Id) 
+VALUES
+      ('2019-12-25', 3, '2019-12-29', 1000.00, 'true', 2, 1),
+	  ('2018-12-25', 4, '2018-12-29', 890.00, 'true', 3, 1);
+
+*/
+/*
+DELETE FROM Reservations 
+WHERE reservation_id IN (7, 8);
+*/
 --SELECT *
 --FROM Users;
 
