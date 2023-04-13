@@ -36,35 +36,35 @@ def codificarConsultas(opcao):
         case 1:
             query = "SELECT Country_name, count(Reservation_id) as qtReservations FROM AccommodationWithLocation A JOIN Reservations R ON A.Accommodation_id=R.fk_Accommodation_Id WHERE Was_approved = 'true' GROUP BY Country_name;"
         case 2:
-            query = "SELECT DISTINCT City_name FROM AccommodationWithLocation A WHERE NOT EXISTS 	(SELECT * FROM AccommodationWithLocation B WHERE (A.City_id = B.City_id) AND B.price >= (SELECT AVG(price) FROM AccommodationWithLocation));"
+            query = "SELECT User_name FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id GROUP BY User_id, User_name HAVING SUM(Final_price)>(SELECT AVG(Final_price) FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id);"
         case 3:
             query = "SELECT DISTINCT City_name FROM AccommodationWithLocation A WHERE NOT EXISTS 	(SELECT * FROM AccommodationWithLocation B WHERE (A.City_id = B.City_id) AND B.price >= (SELECT AVG(price) FROM AccommodationWithLocation));"
         case 4:
             print("Digite uma cidade: ", end="")
             cidade = input()
-            query = "SELECT Accommodation_id FROM AccommodationWithLocation WHERE City_name = " + cidade + " ORDER BY Price;"
+            query = "SELECT Accommodation_id FROM AccommodationWithLocation WHERE City_name = '" + cidade + "' ORDER BY Price;"
         case 5: 
             print("Digite o nome do Guest: ", end="")
             guest = input()
-            query = "SELECT City_name, Check_in_date, Checkout_date, User_name FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id WHERE User_name = " + guest
+            query = "SELECT City_name, Check_in_date, Checkout_date, User_name FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id WHERE User_name = '" + guest + "';"
         case 6:
-            query = "SELECT Country_name FROM Countries C WHERE EXISTS (SELECT * FROM AcomodacaoComLocalizacao A WHERE A.Country_id = C.Country_id));"
+            query = "SELECT Country_name FROM Countries C WHERE EXISTS (SELECT * FROM AccommodationWithLocation A WHERE A.Country_id = C.Country_id);"
         case 7: 
             print("Digite o nome do Guest: ", end="")
             guest = input()
-            query = "SELECT Country_name, COUNT(User_id) FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id WHERE User_name = " + guest + " GROUP BY Country_name, User_id; "
+            query = "SELECT Country_name, COUNT(User_id) FROM AccommodationWithLocation A JOIN UsersReservations U ON A.Accommodation_id=U.fk_Accommodation_Id WHERE User_name = '" + guest + "' GROUP BY Country_name, User_id; "
         case 8:
             print("Digite o número de quartos: ", end="")
             numRooms = input()
             print("Digite o nome da cidade: ", end="")
             cityName = input()
-            query = "SELECT City_name, Number_of_bedrooms, Accommodation_id FROM AccommodationWithLocation WHERE Number_of_bedrooms >" + numRooms + "AND City_name = " + cityName
+            query = "SELECT City_name, Number_of_bedrooms, Accommodation_id FROM AccommodationWithLocation WHERE Number_of_bedrooms >" + numRooms + " AND City_name = '" + cityName + "';"
         case 9: 
             query = "SELECT Favorites_name, fk_Accommodation_Id, fk_User_Id FROM InclusionFavorites GROUP BY Favorites_name, fk_Accommodation_Id, fk_User_Id ORDER BY fk_User_Id;"
         case 10:
             print("Digite o nome do Host: ", end="")
             host = input()
-            query = "SELECT Accommodation_id, City_name FROM AccommodationWithLocation A JOIN Users U ON A.fk_User_Id=U.User_Id WHERE User_name = " + host + " AND Accommodation_id IN (SELECT Accommodation_id FROM Reservations);"
+            query = "SELECT Accommodation_id, City_name FROM AccommodationWithLocation A JOIN Users U ON A.fk_User_Id=U.User_Id WHERE User_name = '" + host + "' AND Accommodation_id IN (SELECT Accommodation_id FROM Reservations);"
     return query
 
 
@@ -72,7 +72,10 @@ def codificarConsultas(opcao):
 ############### MAIN ##############
 opcao = menu()
 while(opcao!=0):
-    pandas.read_sql(codificarConsultas(opcao), engine)
+    #print(codificarConsultas(opcao))
+    print(pandas.read_sql(codificarConsultas(opcao), engine))
+    print("\nPressione qualquer tecla para continuar...\n")
+    input()
     opcao = menu()
 print("Você pressionou 0. Programa encerrado.")
 
